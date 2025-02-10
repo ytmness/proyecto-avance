@@ -1,0 +1,66 @@
+/* General styles */
+.make-reservation-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro elegante */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+  }
+  
+  .make-reservation-container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  .make-reservation-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .make-reservation-form input {
+    margin: 10px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .make-reservation-form button {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6347;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .make-reservation-form button:hover {
+    background-color: #e5533c;
+  }
+  
+  /* Botón para ver Mis Reservaciones */
+  .reservations-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .reservations-button:hover {
+    background-color: #e5533c;
+  }
+  
