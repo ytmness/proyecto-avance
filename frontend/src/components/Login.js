@@ -1,44 +1,34 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../App.css";
+import React, { useState, useEffect } from "react";
+import { useLanguage } from "../context/LanguageContext"; 
 
 function Login() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const navigate = useNavigate(); // useNavigate debe estar dentro de un <Router>
+  const { language, translateText } = useLanguage();
+  const [translatedTexts, setTranslatedTexts] = useState({});
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    console.log("🔥 useEffect en Login.js detectó un cambio de idioma:", language);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simular inicio de sesión exitoso
-    console.log("Iniciar sesión:", formData);
-    navigate("/reservations"); // Redirigir al hacer login
-  };
+    const fetchTranslations = async () => {
+      console.log("♻️ Ejecutando `translateText` en Login.js...");
+      const translations = {
+        loginTitle: await translateText("Iniciar Sesión"),
+        emailPlaceholder: await translateText("Correo"),
+        passwordPlaceholder: await translateText("Contraseña"),
+        loginButton: await translateText("Iniciar sesión"),
+      };
+      console.log("✅ Traducciones obtenidas en Login.js:", translations);
+      setTranslatedTexts(translations);
+    };
+
+    fetchTranslations();
+  }, [language, translateText]);
 
   return (
     <div>
-      <h1>Iniciar Sesión</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Correo"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Iniciar Sesión</button>
-      </form>
+      <h1>{translatedTexts.loginTitle || "Iniciar Sesión"}</h1>
+      <input type="email" placeholder={translatedTexts.emailPlaceholder || "Correo"} />
+      <input type="password" placeholder={translatedTexts.passwordPlaceholder || "Contraseña"} />
+      <button>{translatedTexts.loginButton || "Iniciar sesión"}</button>
     </div>
   );
 }

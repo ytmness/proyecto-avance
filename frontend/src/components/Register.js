@@ -1,79 +1,33 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "../App.css";
+import React, { useState, useEffect } from "react";
+import { useLanguage } from "../context/LanguageContext"; 
 
 function Register() {
-  const [formData, setFormData] = useState({
-    username: "",  // ✅ Aseguramos que username está en el estado
-    email: "",
-    password: "",
-  });
+  const { language, translateText } = useLanguage();
+  const [translatedTexts, setTranslatedTexts] = useState({});
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      console.log("♻️ Traduciendo textos en Register.js a:", language);
+      const translations = {
+        registerTitle: await translateText("Registro"),
+        usernamePlaceholder: await translateText("Nombre de usuario"),
+        emailPlaceholder: await translateText("Correo electrónico"),
+        passwordPlaceholder: await translateText("Contraseña"),
+        registerButton: await translateText("Registrarse"),
+      };
+      setTranslatedTexts(translations);
+    };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    console.log("🟡 Datos enviados al backend:", formData); // ✅ Depuración: Ver qué se envía
-
-    // Verificar que todos los campos estén completos antes de enviar
-    if (!formData.username || !formData.email || !formData.password) {
-      setError("Todos los campos son obligatorios.");
-      return;
-    }
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", formData, {
-        headers: { "Content-Type": "application/json" }, // ✅ Aseguramos que se envíen como JSON
-      });
-
-      console.log("✅ Usuario registrado:", response.data);
-      setSuccess("Registro exitoso.");
-      setError("");
-    } catch (error) {
-      setError(error.response?.data?.error || "Error desconocido");
-      setSuccess("");
-      console.error("❌ Error en el registro:", error.response?.data?.error || "Error desconocido");
-    }
-  };
+    fetchTranslations();
+  }, [language, translateText]); // 🔥 Agregamos `translateText` para evitar la advertencia
 
   return (
-    <div className="register-container">
-      <h1>Registro</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Nombre de usuario"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Correo electrónico"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Registrarse</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+    <div>
+      <h1>{translatedTexts.registerTitle || "Registro"}</h1>
+      <input type="text" placeholder={translatedTexts.usernamePlaceholder || "Nombre de usuario"} />
+      <input type="email" placeholder={translatedTexts.emailPlaceholder || "Correo electrónico"} />
+      <input type="password" placeholder={translatedTexts.passwordPlaceholder || "Contraseña"} />
+      <button>{translatedTexts.registerButton || "Registrarse"}</button>
     </div>
   );
 }
